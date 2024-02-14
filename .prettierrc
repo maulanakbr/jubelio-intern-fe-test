@@ -1,0 +1,13 @@
+{
+  "arrowParens": "avoid",
+  "bracketSpacing": true,
+  "endOfLine": "lf",
+  "printWidth": 80,
+  "quoteProps": "as-needed",
+  "proseWrap": "preserve",
+  "semi": true,
+  "singleAttributePerLine": true,
+  "singleQuote": true,
+  "tailwindFunctions": ["clsx", "cva"],
+  "plugins": ["prettier-plugin-tailwindcss"]
+}

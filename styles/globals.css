@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .wrapper {
+    @apply w-full max-w-7xl p-5 md:px-10 lg:mx-auto xl:px-0;
+  }
+}
