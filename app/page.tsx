@@ -13,12 +13,9 @@ export default function Home() {
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
 
-  const {
-    products: productsData,
-    // total: totalItems,
-    // currentPage,
-    currentSkip,
-  } = useAppSelector(state => state.products);
+  const { products: productsData, currentSkip } = useAppSelector(
+    state => state.products,
+  );
 
   const pathname = usePathname();
 
@@ -35,39 +32,6 @@ export default function Home() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, currentSkip, searchParams.toString()]);
-
-  // const handleClick = (btnType: 'next' | 'prev') => {
-  //   switch (btnType) {
-  //     case 'next':
-  //       dispatch(
-  //         addPage({
-  //           add: 1,
-  //         }),
-  //       );
-
-  //       dispatch(
-  //         addSkip({
-  //           add: 10,
-  //         }),
-  //       );
-  //       break;
-  //     case 'prev':
-  //       dispatch(
-  //         substractPage({
-  //           sub: 1,
-  //         }),
-  //       );
-
-  //       dispatch(
-  //         substractSkip({
-  //           sub: 10,
-  //         }),
-  //       );
-  //       break;
-  //     default:
-  //       null;
-  //   }
-  // };
 
   return (
     <section className="wrapper">
