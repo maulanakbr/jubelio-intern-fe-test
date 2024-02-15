@@ -47,7 +47,7 @@ export default function Search({ limit, skip, select }: SearchProps) {
 
   return (
     <form
-      className="mb-4 w-full lg:max-w-[25rem]"
+      className="mb-4 w-full lg:max-w-[18rem]"
       onSubmit={(e: React.SyntheticEvent) => handleSubmit(e)}
     >
       <div>

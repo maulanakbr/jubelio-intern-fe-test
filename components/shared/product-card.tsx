@@ -87,7 +87,7 @@ export default function ProductCard({ data, classname }: ProductCardProps) {
     <section>
       <div
         className={cn(
-          'mb-4 grid w-full grid-cols-3 gap-4 lg:grid-cols-4',
+          'mb-4 grid w-full grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4',
           classname,
         )}
       >

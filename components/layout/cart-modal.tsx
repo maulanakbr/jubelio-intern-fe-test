@@ -26,7 +26,7 @@ export default function CartModal() {
       open={IsOpen}
       onOpenChange={() => router.push('/')}
     >
-      <DialogContent className="h-[20rem] w-full rounded-md">
+      <DialogContent className="h-[20rem] w-[20rem] rounded-md sm:w-full">
         <DialogHeader>
           <DialogTitle>Cart</DialogTitle>
         </DialogHeader>
