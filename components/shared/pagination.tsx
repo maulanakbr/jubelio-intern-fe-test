@@ -1,51 +1,47 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import React from 'react';
-
-import { formUrlQuery } from '@/lib';
+import * as React from 'react';
 
 import { Button } from '../ui/button';
 
 type PaginationProps = {
-  page: number | string;
-  totalPages: number;
-  urlParamName?: string;
+  currentPage: number;
+  limit: number;
+  totalItems: number | null;
+  handleClick(btnType: 'next' | 'prev'): void;
 };
 
-const Pagination = ({ page, totalPages, urlParamName }: PaginationProps) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+const Pagination = ({
+  currentPage,
+  limit,
+  totalItems,
+  handleClick,
+}: PaginationProps) => {
+  const getMaximumPage = (total: number, limit: number) => {
+    const result = Math.ceil(total / limit);
 
-  const handleClick = (btnType: string) => {
-    const pageValue = btnType === 'next' ? Number(page) + 1 : Number(page) - 1;
-
-    const newUrl = formUrlQuery({
-      params: searchParams.toString(),
-      key: urlParamName || 'page',
-      value: pageValue.toString(),
-    });
-
-    router.push(newUrl, { scroll: false });
+    if (result === 0) return 1;
+    return result;
   };
 
   return (
-    <div className="flex gap-2">
+    <div className="flex items-center justify-between">
       <Button
-        size="lg"
         variant="outline"
-        className="w-28"
         onClick={() => handleClick('prev')}
-        disabled={Number(page) <= 1}
+        disabled={currentPage === 1 ? true : false}
       >
-        Previous
+        Prev
       </Button>
+      <p className="text-sm text-slate-400">
+        {currentPage} / {getMaximumPage(totalItems!, limit)}
+      </p>
       <Button
-        size="lg"
         variant="outline"
-        className="w-28"
         onClick={() => handleClick('next')}
-        disabled={Number(page) >= totalPages}
+        disabled={
+          currentPage === getMaximumPage(totalItems!, limit) ? true : false
+        }
       >
         Next
       </Button>

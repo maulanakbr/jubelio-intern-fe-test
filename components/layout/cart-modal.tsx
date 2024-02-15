@@ -8,6 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { useAppSelector } from '@/hooks/useRedux';
+
+import CartCard from '../shared/cart-card';
+import { ScrollArea } from '../ui/scroll-area';
 
 export default function CartModal() {
   const router = useRouter();
@@ -15,20 +19,20 @@ export default function CartModal() {
 
   const IsOpen = pathname.includes('/cart');
 
+  const { cart: cartData } = useAppSelector(state => state.cart);
+
   return (
     <Dialog
       open={IsOpen}
       onOpenChange={() => router.push('/')}
     >
-      <DialogContent className="w-full max-w-[400px] rounded-md">
+      <DialogContent className="h-[20rem] w-full rounded-md">
         <DialogHeader>
-          <DialogTitle>
-            <h2 className="font-semibold tracking-tight transition-colors">
-              Produk
-            </h2>
-          </DialogTitle>
+          <DialogTitle>Cart</DialogTitle>
         </DialogHeader>
-        <p>Cart is empty</p>
+        <ScrollArea>
+          {cartData ? <CartCard data={cartData} /> : <p>Cart is empty</p>}
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

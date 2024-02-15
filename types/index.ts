@@ -11,14 +11,25 @@ export type BaseSliceState = {
   isSuccess: boolean;
 };
 
-// PRODUCT
-export type Product = {
-  id: string;
-  category: string;
+export type BaseProduct = {
+  id: number;
   title: string;
+  description: string;
   price: number;
+  discountPercentage: number;
+  rating: number;
+  stock: number;
+  brand: string;
+  category: string;
+  thumbnail: string;
   images: string[];
 };
+
+// PRODUCT
+export type Product = Pick<
+  BaseProduct,
+  'id' | 'title' | 'price' | 'category' | 'images'
+>;
 
 export type GetProductsPayload = {
   limit: number;
@@ -29,6 +40,20 @@ export type GetProductsPayload = {
 export type GetProductResponse = {
   products: Product[];
 } & BaseHttpResponse;
+
+export type SearchProductsPayload = {
+  query: string;
+} & GetProductsPayload;
+
+export type SearchProductsResponse = {
+  products: Product[];
+} & BaseHttpResponse;
+
+// CART
+export type CartItem = {
+  productItem: Product;
+  amount: number;
+};
 
 //  URL QUERY PARAMS
 export type UrlQueryParams = {

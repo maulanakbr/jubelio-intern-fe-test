@@ -1,9 +1,11 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import * as React from 'react';
 
+import Pagination from '@/components/shared/pagination';
 import ProductCard from '@/components/shared/product-card';
-import { Button } from '@/components/ui/button';
+import Search from '@/components/shared/search';
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 import { products as getProducts } from '@/redux/slices/productSlice';
 import type { GetProductsPayload } from '@/types';
@@ -12,30 +14,36 @@ type PaginationState = {
   currentPage: number;
 } & GetProductsPayload;
 
+// Omit<PaginationState, 'currentPage'>
 export default function Home() {
+  const {
+    products: productsData,
+    total: totalItems,
+    currentPage,
+  } = useAppSelector(state => state.products);
+
   const [params, setParams] = React.useState<PaginationState>({
-    currentPage: 1,
+    currentPage,
     limit: 10,
     skip: 0,
     select: 'title,price,category,images',
   });
 
-  console.log(typeof setParams);
-
   const dispatch = useAppDispatch();
-  const { products: productsData, total: totalItems } = useAppSelector(
-    state => state.products,
-  );
+
+  const searchParams = useSearchParams();
 
   React.useEffect(() => {
-    dispatch(
-      getProducts({
-        limit: params.limit,
-        skip: params.skip,
-        select: params.select,
-      }),
-    );
-  }, [params.skip]);
+    if (!searchParams.toString()) {
+      dispatch(
+        getProducts({
+          limit: params.limit,
+          skip: params.skip,
+          select: params.select,
+        }),
+      );
+    }
+  }, [params.skip, searchParams, params.currentPage]);
 
   const handleClick = (btnType: 'next' | 'prev') => {
     if (btnType === 'next') {
@@ -44,6 +52,12 @@ export default function Home() {
         currentPage: params.currentPage + 1,
         skip: params.skip + 10,
       }));
+
+      // addPage({
+      //   add: 1,
+      // });
+
+      console.log(currentPage);
     }
 
     if (btnType === 'prev') {
@@ -52,32 +66,27 @@ export default function Home() {
         currentPage: params.currentPage - 1,
         skip: params.skip - 10,
       }));
+
+      // substractPage({
+      //   sub: 1,
+      // });
     }
   };
 
-  console.log(productsData);
   return (
     <section className="wrapper">
+      <Search
+        limit={params.limit}
+        skip={params.skip}
+        select={params.select}
+      />
       <ProductCard data={productsData} />
-      <div className="flex justify-between">
-        <Button
-          variant="outline"
-          onClick={() => handleClick('prev')}
-          disabled={params.currentPage === 1 ? true : false}
-        >
-          Prev
-        </Button>
-        <p>{params.currentPage}</p>
-        <Button
-          variant="outline"
-          onClick={() => handleClick('next')}
-          disabled={
-            params.currentPage === totalItems! / params.limit ? true : false
-          }
-        >
-          Next
-        </Button>
-      </div>
+      <Pagination
+        currentPage={params.currentPage}
+        limit={params.limit}
+        totalItems={totalItems}
+        handleClick={handleClick}
+      />
     </section>
   );
 }

@@ -9,6 +9,7 @@ import createWebStorage from 'redux-persist/es/storage/createWebStorage';
 
 import { createPersistStore } from '@/lib';
 
+import { cartReducer as cart } from './slices/cartSlice';
 import { productsReducer as products } from './slices/productSlice';
 
 const storage =
@@ -24,6 +25,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   products,
+  cart,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

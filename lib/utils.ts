@@ -3,7 +3,7 @@ import qs from 'query-string';
 import createWebStorage from 'redux-persist/es/storage/createWebStorage';
 import { twMerge } from 'tailwind-merge';
 
-import type { UrlQueryParams } from '@/types';
+import type { CartItem, Product, UrlQueryParams } from '@/types';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -47,3 +47,29 @@ export function formUrlQuery({ params, key, value }: UrlQueryParams) {
     { skipNull: true },
   );
 }
+
+export const findCartItemIndex = (productItem: Product, cart: CartItem[]) => {
+  const cartItemIndex = cart.findIndex(
+    cartItem => cartItem.productItem.id === productItem.id,
+  );
+
+  if (cartItemIndex === -1) {
+    return undefined;
+  } else {
+    return cartItemIndex;
+  }
+};
+
+export const collectAllIndexesFromCart = (cart: CartItem[]) => {
+  const allIndexesFromCart: number[] = [];
+
+  cart.forEach(item => {
+    allIndexesFromCart.push(item.productItem.id);
+  });
+
+  return allIndexesFromCart;
+};
+
+export const extractQueryParams = (query: string) => {
+  return query.split('')[2];
+};
