@@ -23,13 +23,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header />
-        <main>
-          <Providers>
+        <Providers>
+          <Header />
+          <main>
             {children}
             {cartDialog}
-          </Providers>
-        </main>
+          </main>
+        </Providers>
       </body>
     </html>
   );

@@ -14,9 +14,10 @@ type ProductsState = {
   products: Product[] | null;
   total: number | null;
   currentPage: number;
+  currentSkip: number;
 } & BaseSliceState;
 
-type CurrentPagePayload = {
+type ProductActions = {
   add: number;
   sub: number;
 };
@@ -25,6 +26,7 @@ const initialState: ProductsState = {
   products: null,
   total: null,
   currentPage: 1,
+  currentSkip: 0,
   isError: '',
   isLoading: false,
   isSuccess: false,
@@ -66,15 +68,29 @@ const productSlice = createSlice({
   name: 'product',
   initialState,
   reducers: {
-    addPage(state, action: PayloadAction<Omit<CurrentPagePayload, 'sub'>>) {
-      let page = state.currentPage;
-
-      if (page === null) page = action.payload.add;
-      page += action.payload.add;
+    addPage(state, action: PayloadAction<Omit<ProductActions, 'sub'>>) {
+      state.currentPage += action.payload.add;
     },
-    substractPage(state, action: PayloadAction<{ sub: number }>) {
-      let page = state.currentPage;
-      page! -= action.payload.sub;
+    substractPage(state, action: PayloadAction<Omit<ProductActions, 'add'>>) {
+      state.currentPage -= action.payload.sub;
+    },
+    resetPage(state) {
+      state.currentPage = 1;
+    },
+    addSkip(state, action: PayloadAction<Omit<ProductActions, 'sub'>>) {
+      state.currentSkip += action.payload.add;
+    },
+    substractSkip(state, action: PayloadAction<Omit<ProductActions, 'add'>>) {
+      state.currentSkip -= action.payload.sub;
+    },
+    resetSkip(state) {
+      state.currentSkip = 0;
+    },
+    resetProducts(state) {
+      state.products = [];
+    },
+    resetTotal(state) {
+      state.total = null;
     },
   },
   extraReducers(builder) {
@@ -85,7 +101,6 @@ const productSlice = createSlice({
       .addCase(products.fulfilled, (state, action) => {
         state.products = action.payload.products;
         state.total = action.payload.total;
-        state.currentPage = 1;
         state.isLoading = false;
         state.isSuccess = true;
       })
@@ -112,5 +127,14 @@ const productSlice = createSlice({
   },
 });
 
-export const { addPage, substractPage } = productSlice.actions;
+export const {
+  addPage,
+  substractPage,
+  resetPage,
+  addSkip,
+  substractSkip,
+  resetSkip,
+  resetProducts,
+  resetTotal,
+} = productSlice.actions;
 export const productsReducer = productSlice.reducer;

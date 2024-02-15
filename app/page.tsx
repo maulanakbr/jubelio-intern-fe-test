@@ -1,92 +1,86 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import * as React from 'react';
 
-import Pagination from '@/components/shared/pagination';
 import ProductCard from '@/components/shared/product-card';
 import Search from '@/components/shared/search';
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
+import { LIMIT_PER_PAGE, SELECT_QUERY } from '@/lib';
 import { products as getProducts } from '@/redux/slices/productSlice';
-import type { GetProductsPayload } from '@/types';
 
-type PaginationState = {
-  currentPage: number;
-} & GetProductsPayload;
-
-// Omit<PaginationState, 'currentPage'>
 export default function Home() {
-  const {
-    products: productsData,
-    total: totalItems,
-    currentPage,
-  } = useAppSelector(state => state.products);
-
-  const [params, setParams] = React.useState<PaginationState>({
-    currentPage,
-    limit: 10,
-    skip: 0,
-    select: 'title,price,category,images',
-  });
-
+  const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
 
-  const searchParams = useSearchParams();
+  const {
+    products: productsData,
+    // total: totalItems,
+    // currentPage,
+    currentSkip,
+  } = useAppSelector(state => state.products);
+
+  const pathname = usePathname();
 
   React.useEffect(() => {
-    if (!searchParams.toString()) {
+    if (pathname === '/' && !searchParams.toString()) {
       dispatch(
         getProducts({
-          limit: params.limit,
-          skip: params.skip,
-          select: params.select,
+          limit: LIMIT_PER_PAGE,
+          skip: currentSkip,
+          select: SELECT_QUERY,
         }),
       );
     }
-  }, [params.skip, searchParams, params.currentPage]);
 
-  const handleClick = (btnType: 'next' | 'prev') => {
-    if (btnType === 'next') {
-      setParams(prevState => ({
-        ...prevState,
-        currentPage: params.currentPage + 1,
-        skip: params.skip + 10,
-      }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, currentSkip, searchParams.toString()]);
 
-      // addPage({
-      //   add: 1,
-      // });
+  // const handleClick = (btnType: 'next' | 'prev') => {
+  //   switch (btnType) {
+  //     case 'next':
+  //       dispatch(
+  //         addPage({
+  //           add: 1,
+  //         }),
+  //       );
 
-      console.log(currentPage);
-    }
+  //       dispatch(
+  //         addSkip({
+  //           add: 10,
+  //         }),
+  //       );
+  //       break;
+  //     case 'prev':
+  //       dispatch(
+  //         substractPage({
+  //           sub: 1,
+  //         }),
+  //       );
 
-    if (btnType === 'prev') {
-      setParams(prevState => ({
-        ...prevState,
-        currentPage: params.currentPage - 1,
-        skip: params.skip - 10,
-      }));
-
-      // substractPage({
-      //   sub: 1,
-      // });
-    }
-  };
+  //       dispatch(
+  //         substractSkip({
+  //           sub: 10,
+  //         }),
+  //       );
+  //       break;
+  //     default:
+  //       null;
+  //   }
+  // };
 
   return (
     <section className="wrapper">
-      <Search
-        limit={params.limit}
-        skip={params.skip}
-        select={params.select}
-      />
-      <ProductCard data={productsData} />
-      <Pagination
-        currentPage={params.currentPage}
-        limit={params.limit}
-        totalItems={totalItems}
-        handleClick={handleClick}
-      />
+      <h2 className="mb-4 text-[1.3rem] font-semibold">Produk</h2>
+      <hr className="mb-8" />
+      <div className="mb-3 flex w-full flex-col justify-stretch lg:flex-row lg:gap-[6rem]">
+        <Search
+          limit={LIMIT_PER_PAGE}
+          skip={currentSkip}
+          select={SELECT_QUERY}
+        />
+        <ProductCard data={productsData} />
+      </div>
     </section>
   );
 }
