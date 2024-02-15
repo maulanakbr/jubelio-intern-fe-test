@@ -5,15 +5,16 @@ import { cn } from '@/lib';
 import type { CartItem } from '@/types';
 
 import { Card } from '../ui/card';
+import Skeleton from '../ui/skeleton';
 
 type CartCardProps = {
   data: CartItem[] | null;
-  classname?: string;
+  loading: boolean;
 };
 
-export default function CartCard({ data, classname }: CartCardProps) {
+export default function CartCard({ data, loading }: CartCardProps) {
   return (
-    <div className={cn(classname)}>
+    <div>
       {data!.length > 0 ? (
         data?.map(cart => (
           <Card
@@ -23,14 +24,18 @@ export default function CartCard({ data, classname }: CartCardProps) {
             )}
           >
             <div className="flex items-center gap-4">
-              <Image
-                className="h-8 w-8 object-contain"
-                src={cart.productItem.images[0]}
-                alt={String(cart.productItem.id)}
-                width={300}
-                height={300}
-                priority
-              />
+              {!loading ? (
+                <Image
+                  className="h-8 w-8 object-contain"
+                  src={cart.productItem.images[0]}
+                  alt={String(cart.productItem.id)}
+                  width={300}
+                  height={300}
+                  priority
+                />
+              ) : (
+                <Skeleton className="inline-block h-[10rem] w-full" />
+              )}
               <h2 className="text-balance text-sm leading-normal">
                 {cart.productItem.title}
               </h2>

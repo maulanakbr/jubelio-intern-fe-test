@@ -3,110 +3,69 @@ import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 import {
-  cn,
   collectAllIndexesFromCart,
   currencyConverter,
-  LIMIT_PER_PAGE,
   turncateString,
 } from '@/lib';
 import { addProduct } from '@/redux/slices/cartSlice';
-import {
-  addPage,
-  addSkip,
-  substractPage,
-  substractSkip,
-} from '@/redux/slices/productSlice';
 import type { Product } from '@/types';
 
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
+import Skeleton from '../ui/skeleton';
 import Icons from './icons';
-import Pagination from './pagination';
 
 type ProductCardProps = {
   data: Product[] | null;
-  classname?: string;
+  loading: boolean;
 };
 
-export default function ProductCard({ data, classname }: ProductCardProps) {
+export default function ProductCard({ data, loading }: ProductCardProps) {
+  const dispatch = useAppDispatch();
   const { cart: cartData } = useAppSelector(state => state.cart);
 
   const [isAddedToCart, setIsAddedToCart] = React.useState<number[]>(
     collectAllIndexesFromCart(cartData),
   );
 
-  const dispatch = useAppDispatch();
-  const { total: totalItems, currentPage } = useAppSelector(
-    state => state.products,
-  );
-
   const handleClick = React.useCallback(
     (product: Product) => {
+      if (isAddedToCart.length > 0 && cartData.length === 0)
+        setIsAddedToCart([-1]);
+
       dispatch(addProduct(product));
       setIsAddedToCart(prevState => [...prevState, product.id]);
     },
-    [dispatch],
+    [dispatch, cartData.length, isAddedToCart],
   );
 
-  const handlePagination = (btnType: 'next' | 'prev') => {
-    switch (btnType) {
-      case 'next':
-        dispatch(
-          addPage({
-            add: 1,
-          }),
-        );
-
-        dispatch(
-          addSkip({
-            add: 10,
-          }),
-        );
-        break;
-      case 'prev':
-        dispatch(
-          substractPage({
-            sub: 1,
-          }),
-        );
-
-        dispatch(
-          substractSkip({
-            sub: 10,
-          }),
-        );
-        break;
-      default:
-        null;
-    }
-  };
-
   return (
-    <section className="cursor-pointer">
-      <div
-        className={cn(
-          'mb-4 grid w-full grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4',
-          classname,
-        )}
-      >
+    <section>
+      <div className="mb-4 grid w-full grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {data?.map(product => (
           <Card
             key={product.id}
             className="w-full overflow-hidden"
           >
-            <Image
-              className="inline-block h-[10rem] w-full object-cover md:w-[13rem]"
-              src={product.images[0]}
-              alt={String(product.id)}
-              width={300}
-              height={300}
-            />
+            {!loading ? (
+              <Image
+                className="inline-block h-[10rem] w-full object-cover"
+                src={product.images[0]}
+                alt={String(product.id)}
+                width={300}
+                height={300}
+                loading="lazy"
+              />
+            ) : (
+              <Skeleton className="inline-block h-[10rem] w-full" />
+            )}
             <div className="h-full p-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-balance text-sm  leading-normal">
-                  {turncateString(product.title, 14)}
+                <h2 className="text-balance text-sm leading-normal">
+                  {turncateString(product.title, 10)}
                 </h2>
-                {!isAddedToCart.includes(product.id) ? (
+                {!isAddedToCart.includes(product.id) ||
+                cartData.length === 0 ? (
                   <Button
                     className="h-full"
                     variant="ghost"
@@ -127,19 +86,13 @@ export default function ProductCard({ data, classname }: ProductCardProps) {
               <h2 className="text-balance text-sm leading-normal">
                 {product.category}
               </h2>
-              <h1 className="text-md text-balance font-medium leading-normal">
+              <h1 className="md:text-md text-balance text-sm font-semibold leading-tight">
                 {currencyConverter(product.price)}
               </h1>
             </div>
           </Card>
         ))}
       </div>
-      <Pagination
-        currentPage={currentPage}
-        limit={LIMIT_PER_PAGE}
-        totalItems={totalItems}
-        handleClick={handlePagination}
-      />
     </section>
   );
 }

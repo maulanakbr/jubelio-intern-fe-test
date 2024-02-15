@@ -3,14 +3,14 @@
 import Link from 'next/link';
 import * as React from 'react';
 
-import { useAppDispatch } from '@/hooks/useRedux';
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 import { resetPage, resetSkip } from '@/redux/slices/productSlice';
 
-import { buttonVariants } from '../ui/button';
-import Icons from './icons';
+import CartButton from './cart-button';
 
 export default function Header() {
   const dispatch = useAppDispatch();
+  const { cart: cartData } = useAppSelector(state => state.cart);
 
   const handleClick = React.useCallback(() => {
     dispatch(resetPage());
@@ -27,12 +27,7 @@ export default function Header() {
         >
           E-Commerce
         </Link>
-        <Link
-          className={buttonVariants({ variant: 'ghost', size: 'full' })}
-          href="/cart"
-        >
-          <Icons.shoppingCart />
-        </Link>
+        <CartButton cartLength={cartData.length} />
       </div>
     </header>
   );

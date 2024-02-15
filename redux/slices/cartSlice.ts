@@ -26,8 +26,11 @@ const cartSlice = createSlice({
         state.cart[productItemIndex].amount += 1;
       else state.cart.push({ productItem, amount: 1 });
     },
+    resetCart(state) {
+      state.cart = [];
+    },
   },
 });
 
-export const { addProduct } = cartSlice.actions;
+export const { addProduct, resetCart } = cartSlice.actions;
 export const cartReducer = cartSlice.reducer;
