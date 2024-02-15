@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 import {
   cn,
   collectAllIndexesFromCart,
+  currencyConverter,
   LIMIT_PER_PAGE,
   turncateString,
 } from '@/lib';
@@ -35,12 +36,9 @@ export default function ProductCard({ data, classname }: ProductCardProps) {
   );
 
   const dispatch = useAppDispatch();
-  const {
-    // products: productsData,
-    total: totalItems,
-    currentPage,
-    // currentSkip,
-  } = useAppSelector(state => state.products);
+  const { total: totalItems, currentPage } = useAppSelector(
+    state => state.products,
+  );
 
   const handleClick = React.useCallback(
     (product: Product) => {
@@ -84,7 +82,7 @@ export default function ProductCard({ data, classname }: ProductCardProps) {
   };
 
   return (
-    <section>
+    <section className="cursor-pointer">
       <div
         className={cn(
           'mb-4 grid w-full grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4',
@@ -94,20 +92,23 @@ export default function ProductCard({ data, classname }: ProductCardProps) {
         {data?.map(product => (
           <Card
             key={product.id}
-            className={cn('w-full overflow-hidden')}
+            className="w-full overflow-hidden"
           >
             <Image
-              className="h-[10rem] object-cover"
+              className="inline-block h-[10rem] w-full object-cover md:w-[13rem]"
               src={product.images[0]}
               alt={String(product.id)}
               width={300}
               height={300}
             />
             <div className="h-full p-4">
-              <div className="flex min-h-[2.5rem] items-center justify-between">
-                <h2>{turncateString(product.title, 12)}</h2>
+              <div className="flex items-center justify-between">
+                <h2 className="text-balance text-sm  leading-normal">
+                  {turncateString(product.title, 14)}
+                </h2>
                 {!isAddedToCart.includes(product.id) ? (
                   <Button
+                    className="h-full"
                     variant="ghost"
                     size="full"
                     onClick={() => handleClick(product)}
@@ -123,8 +124,12 @@ export default function ProductCard({ data, classname }: ProductCardProps) {
                   </div>
                 )}
               </div>
-              <h2>{product.category}</h2>
-              <h1>{product.price}</h1>
+              <h2 className="text-balance text-sm leading-normal">
+                {product.category}
+              </h2>
+              <h1 className="text-md text-balance font-medium leading-normal">
+                {currencyConverter(product.price)}
+              </h1>
             </div>
           </Card>
         ))}

@@ -61,7 +61,7 @@ export default function Search({ limit, skip, select }: SearchProps) {
           <Input
             id="inputForm"
             type="search"
-            placeholder="Search your product"
+            placeholder="Cari produk"
             ref={ref}
           />
           <Button type="submit">Terapkan</Button>

@@ -24,16 +24,20 @@ export default function CartCard({ data, classname }: CartCardProps) {
           >
             <div className="flex items-center gap-4">
               <Image
-                className="h-8 w-8 object-none"
+                className="h-8 w-8 object-contain"
                 src={cart.productItem.images[0]}
                 alt={String(cart.productItem.id)}
                 width={300}
                 height={300}
                 priority
               />
-              <h2>{cart.productItem.title}</h2>
+              <h2 className="text-balance text-sm leading-normal">
+                {cart.productItem.title}
+              </h2>
             </div>
-            <h1>Qty: {cart.amount}</h1>
+            <p className="text-balance text-xs leading-normal">
+              Qty: {cart.amount}
+            </p>
           </Card>
         ))
       ) : (

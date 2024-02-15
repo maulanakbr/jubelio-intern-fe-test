@@ -3,6 +3,7 @@
 import { usePathname, useSearchParams } from 'next/navigation';
 import * as React from 'react';
 
+import NotFound from '@/components/shared/not-found';
 import ProductCard from '@/components/shared/product-card';
 import Search from '@/components/shared/search';
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
@@ -37,13 +38,17 @@ export default function Home() {
     <section className="wrapper">
       <h2 className="mb-4 text-[1.3rem] font-semibold">Produk</h2>
       <hr className="mb-8" />
-      <div className="mb-3 flex w-full flex-col justify-stretch lg:flex-row lg:gap-[6rem]">
+      <div className="mb-3 flex w-full flex-col justify-between lg:flex-row">
         <Search
           limit={LIMIT_PER_PAGE}
           skip={currentSkip}
           select={SELECT_QUERY}
         />
-        <ProductCard data={productsData} />
+        {productsData?.length === 0 ? (
+          <NotFound />
+        ) : (
+          <ProductCard data={productsData} />
+        )}
       </div>
     </section>
   );

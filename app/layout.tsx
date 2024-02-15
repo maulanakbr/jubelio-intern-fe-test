@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google';
 
 import Header from '@/components/shared/header';
 import Providers from '@/components/shared/providers';
+import Footer from '@/components/ui/footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,12 +24,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>
+        <Providers
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+        >
           <Header />
-          <main>
+          <main className="min-h-[100vh]">
             {children}
             {cartDialog}
           </main>
+          <Footer />
         </Providers>
       </body>
     </html>

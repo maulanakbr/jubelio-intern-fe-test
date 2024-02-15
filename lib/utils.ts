@@ -5,6 +5,8 @@ import { twMerge } from 'tailwind-merge';
 
 import type { CartItem, Product, UrlQueryParams } from '@/types';
 
+import { DOLLAR_TO_IDR } from '.';
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -68,6 +70,19 @@ export const collectAllIndexesFromCart = (cart: CartItem[]) => {
   });
 
   return allIndexesFromCart;
+};
+
+export const sumTotalAmountCart = (cart: CartItem[]): number => {
+  return cart.reduce((prev, acc) => acc.productItem.price + prev, 0);
+};
+
+export const currencyConverter = (currency: number) => {
+  const amount = currency * DOLLAR_TO_IDR;
+
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+  }).format(amount);
 };
 
 export const extractQueryParams = (query: string) => {

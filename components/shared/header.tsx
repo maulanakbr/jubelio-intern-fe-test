@@ -18,7 +18,7 @@ export default function Header() {
   }, [dispatch]);
 
   return (
-    <header className="bg-zinc-200">
+    <header className="bg-tertiary">
       <div className="wrapper flex items-center justify-between">
         <Link
           className="font-semibold"
@@ -28,7 +28,7 @@ export default function Header() {
           E-Commerce
         </Link>
         <Link
-          className={buttonVariants({ variant: 'ghost' })}
+          className={buttonVariants({ variant: 'ghost', size: 'full' })}
           href="/cart"
         >
           <Icons.shoppingCart />
