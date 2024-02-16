@@ -29,7 +29,7 @@ export default function CartModal() {
   const handleCheckout = React.useCallback(() => {
     dispatch(resetCart());
     router.push('/');
-  }, []);
+  }, [dispatch, router]);
 
   return (
     <Dialog

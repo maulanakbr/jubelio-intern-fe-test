@@ -1,9 +1,8 @@
 import { type ClassValue, clsx } from 'clsx';
-import qs from 'query-string';
 import createWebStorage from 'redux-persist/es/storage/createWebStorage';
 import { twMerge } from 'tailwind-merge';
 
-import type { CartItem, Product, UrlQueryParams } from '@/types';
+import type { CartItem, Product } from '@/types';
 
 import { DOLLAR_TO_IDR } from '.';
 
@@ -34,20 +33,6 @@ export function createPersistStore() {
 export function turncateString(input: string, amount: number): string {
   if (amount > input.length) return input;
   return `${input.substring(0, amount)}...`;
-}
-
-export function formUrlQuery({ params, key, value }: UrlQueryParams) {
-  const currentUrl = qs.parse(params);
-
-  currentUrl[key] = value;
-
-  return qs.stringifyUrl(
-    {
-      url: window.location.pathname,
-      query: currentUrl,
-    },
-    { skipNull: true },
-  );
 }
 
 export const findCartItemIndex = (productItem: Product, cart: CartItem[]) => {
@@ -87,4 +72,11 @@ export const currencyConverter = (currency: number) => {
 
 export const extractQueryParams = (query: string) => {
   return query.split('')[2];
+};
+
+export const upperCaseFirstLetter = (input: string) => {
+  const splitter = input.split('');
+  splitter[0] = splitter[0].toUpperCase();
+
+  return splitter.join('');
 };

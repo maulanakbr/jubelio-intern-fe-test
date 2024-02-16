@@ -6,6 +6,7 @@ import {
   collectAllIndexesFromCart,
   currencyConverter,
   turncateString,
+  upperCaseFirstLetter,
 } from '@/lib';
 import { addProduct } from '@/redux/slices/cartSlice';
 import type { Product } from '@/types';
@@ -54,7 +55,7 @@ export default function ProductCard({ data, loading }: ProductCardProps) {
                 alt={String(product.id)}
                 width={300}
                 height={300}
-                loading="lazy"
+                priority
               />
             ) : (
               <Skeleton className="inline-block h-[10rem] w-full" />
@@ -84,7 +85,7 @@ export default function ProductCard({ data, loading }: ProductCardProps) {
                 )}
               </div>
               <h2 className="text-balance text-sm leading-normal">
-                {product.category}
+                {upperCaseFirstLetter(product.category)}
               </h2>
               <h1 className="md:text-md text-balance text-sm font-semibold leading-tight">
                 {currencyConverter(product.price)}

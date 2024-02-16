@@ -5,13 +5,11 @@ import type { BaseSliceState, CartItem, Product } from '@/types';
 
 type CartState = {
   cart: CartItem[];
-} & BaseSliceState;
+} & Pick<BaseSliceState, 'isLoading'>;
 
 const initialState: CartState = {
   cart: [],
-  isError: '',
   isLoading: false,
-  isSuccess: false,
 };
 
 const cartSlice = createSlice({
