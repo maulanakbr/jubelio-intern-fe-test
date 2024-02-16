@@ -1,4 +1,4 @@
-This projects is developed due to Jubelio's Frontend Engineer Intern position test.
+This project is developed to join Jubelio's Frontend Engineer Intern position project test.
 
 ## Tech Stacks
 
