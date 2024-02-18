@@ -15,20 +15,28 @@ type SearchProps = {
   limit: number;
   skip: number;
   select: string;
+  isPrefetch: boolean;
 };
 
-export default function Search({ limit, skip, select }: SearchProps) {
+export default function Search({
+  limit,
+  skip,
+  select,
+  isPrefetch,
+}: SearchProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
+  const params = new URLSearchParams(searchParams);
 
   const ref = React.useRef<React.ElementRef<'input'>>(null);
+  if (isPrefetch && params.size === 0) {
+    ref.current!.value = '';
+  }
 
   const dispatch = useAppDispatch();
-  // const { currentPage } = useAppSelector(state => state.products);
 
   const handleSubmit = (e: React.SyntheticEvent) => {
-    const params = new URLSearchParams(searchParams);
     params.set('page', '1');
 
     e.preventDefault();

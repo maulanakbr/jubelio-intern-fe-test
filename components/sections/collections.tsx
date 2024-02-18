@@ -48,7 +48,7 @@ export default function Collections() {
           page++;
 
           params.set('page', page.toString());
-          router.replace(`${pathname}?${params.toString()}`);
+          router.replace(`${pathname}?${params.toString()}`, { scroll: false });
           break;
         case 'prev':
           dispatch(
