@@ -1,4 +1,4 @@
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 
 import { useAppDispatch } from '@/hooks/useRedux';
@@ -18,19 +18,31 @@ type SearchProps = {
 };
 
 export default function Search({ limit, skip, select }: SearchProps) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const ref = React.useRef<React.ElementRef<'input'>>(null);
 
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
+  // const { currentPage } = useAppSelector(state => state.products);
 
   const handleSubmit = (e: React.SyntheticEvent) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('page', '1');
+
     e.preventDefault();
 
     dispatch(resetPage());
     dispatch(resetSkip());
 
-    router.push(`?q=${ref.current?.value}`, { scroll: false });
+    if (ref.current?.value) {
+      params.set('query', ref.current.value);
+    } else {
+      params.delete('query');
+    }
+
+    router.replace(`${pathname}?${params.toString()}`);
   };
 
   React.useEffect(() => {

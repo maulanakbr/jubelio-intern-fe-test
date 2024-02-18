@@ -1,3 +1,4 @@
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
@@ -13,6 +14,10 @@ import Pagination from '../shared/pagination';
 import ProductCard from '../shared/product-card';
 
 export default function Collections() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const dispatch = useAppDispatch();
   const {
     products: productsData,
@@ -23,6 +28,9 @@ export default function Collections() {
 
   const handlePagination = React.useCallback(
     (btnType: 'next' | 'prev') => {
+      const params = new URLSearchParams(searchParams);
+      let page = currentPage;
+
       switch (btnType) {
         case 'next':
           dispatch(
@@ -36,6 +44,11 @@ export default function Collections() {
               add: 10,
             }),
           );
+
+          page++;
+
+          params.set('page', page.toString());
+          router.replace(`${pathname}?${params.toString()}`);
           break;
         case 'prev':
           dispatch(
@@ -49,12 +62,17 @@ export default function Collections() {
               sub: 10,
             }),
           );
+
+          page--;
+
+          params.set('page', page.toString());
+          router.replace(`${pathname}?${params.toString()}`);
           break;
         default:
           null;
       }
     },
-    [dispatch],
+    [dispatch, currentPage, pathname, searchParams, router],
   );
 
   return (

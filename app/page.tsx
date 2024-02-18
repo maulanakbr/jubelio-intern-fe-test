@@ -11,14 +11,13 @@ import { LIMIT_PER_PAGE, SELECT_QUERY } from '@/lib';
 import { products as getProducts } from '@/redux/slices/productSlice';
 
 export default function Home() {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
 
   const { products: productsData, currentSkip } = useAppSelector(
     state => state.products,
   );
-
-  const pathname = usePathname();
 
   React.useEffect(() => {
     if (pathname === '/' && !searchParams.toString()) {
