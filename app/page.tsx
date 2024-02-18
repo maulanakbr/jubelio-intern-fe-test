@@ -22,18 +22,20 @@ export default function Home() {
   }, [total]);
 
   return (
-    <section className="wrapper">
-      <h2 className="mb-4 text-[1.3rem] font-semibold">Produk</h2>
-      <hr className="mb-8" />
-      <div className="mb-3 flex w-full flex-col justify-between lg:flex-row lg:gap-10">
-        <Search
-          limit={LIMIT_PER_PAGE}
-          skip={currentSkip}
-          select={SELECT_QUERY}
-          isPrefetch={prefetch}
-        />
-        {productsData?.length === 0 ? <NotFound /> : <Collections />}
-      </div>
-    </section>
+    <main className="min-h-[100vh]">
+      <section className="wrapper">
+        <h2 className="mb-4 text-[1.3rem] font-semibold">Produk</h2>
+        <hr className="mb-8" />
+        <div className="mb-3 flex w-full flex-col justify-between lg:flex-row lg:gap-10">
+          <Search
+            limit={LIMIT_PER_PAGE}
+            skip={currentSkip}
+            select={SELECT_QUERY}
+            isPrefetch={prefetch}
+          />
+          {productsData?.length === 0 ? <NotFound /> : <Collections />}
+        </div>
+      </section>
+    </main>
   );
 }

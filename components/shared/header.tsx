@@ -26,7 +26,7 @@ export default function Header() {
     <header className="bg-tertiary">
       <div className="wrapper flex items-center justify-between">
         <Button
-          className="text-md border p-0 font-semibold"
+          className="text-md p-0 font-semibold"
           variant="link"
           onClick={handleClick}
         >

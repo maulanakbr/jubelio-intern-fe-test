@@ -2,6 +2,7 @@ import '../styles/globals.css';
 
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import * as React from 'react';
 
 import Header from '@/components/shared/header';
 import Providers from '@/components/shared/providers';
@@ -30,10 +31,8 @@ export default function RootLayout({
           enableSystem
         >
           <Header />
-          <main className="min-h-[100vh]">
-            {children}
-            {cartDialog}
-          </main>
+          {children}
+          {cartDialog}
           <Footer />
         </Providers>
       </body>

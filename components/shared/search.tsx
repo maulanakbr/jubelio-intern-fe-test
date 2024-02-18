@@ -30,6 +30,7 @@ export default function Search({
   const params = new URLSearchParams(searchParams);
 
   const ref = React.useRef<React.ElementRef<'input'>>(null);
+
   if (isPrefetch && params.size === 0) {
     ref.current!.value = '';
   }

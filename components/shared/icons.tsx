@@ -1,6 +1,7 @@
 import {
   CheckIcon,
   Laptop,
+  Loader2,
   Moon,
   SearchX,
   ShoppingCart,
@@ -14,6 +15,7 @@ const Icons = {
   moon: Moon,
   laptop: Laptop,
   search: SearchX,
+  spinner: Loader2,
 };
 
 export default Icons;
