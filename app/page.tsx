@@ -11,15 +11,15 @@ import { LIMIT_PER_PAGE, SELECT_QUERY } from '@/lib';
 export default function Home() {
   const [prefetch, setPrefetch] = React.useState(false);
 
-  const { products: productsData, currentSkip } = useAppSelector(
-    state => state.products,
-  );
+  const {
+    products: productsData,
+    currentSkip,
+    total,
+  } = useAppSelector(state => state.products);
 
   React.useEffect(() => {
-    if (productsData?.length !== 100) {
-      setPrefetch(true);
-    }
-  }, [productsData]);
+    setPrefetch(true);
+  }, [total]);
 
   return (
     <section className="wrapper">
